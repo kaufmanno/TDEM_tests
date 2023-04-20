@@ -1,4 +1,18 @@
-from SimPEG import Maps, Utils, Problem, Props
+from SimPEG import maps as Maps
+from SimPEG import utils as Utils
+from SimPEG import simulation as Problem
+from SimPEG import props as Props
+# from SimPEG import models as Models
+# from SimPEG import survey as Survey
+# from SimPEG import regularization as Regularization
+# from SimPEG import data_misfit as DataMisfit
+# from SimPEG import inverse_problem as InvProblem
+# from SimPEG import optimization as Optimization
+# from SimPEG import directives as Directives
+# from SimPEG import inversion as Inversion
+
+# from SimPEG import Maps, Utils, Problem, Props
+
 import numpy as np
 from .Survey import BaseEM1DSurvey
 from scipy.constants import mu_0
@@ -15,14 +29,14 @@ except ImportError as e:
     rte_fortran = None
 
 
-class EM1D(Problem.BaseProblem):
+class EM1D(Problem.BaseSimulation):
     """
     Pseudo analytic solutions for frequency and time domain EM problems
     assumingLayered earth (1D).
     """
     surveyPair = BaseEM1DSurvey
     mapPair = Maps.IdentityMap
-    chi = None
+    # chi = None
     hankel_filter = 'key_101_2009'  # Default: Hankel filter
     hankel_pts_per_dec = None       # Default: Standard DLF
     verbose = False
@@ -40,27 +54,40 @@ class EM1D(Problem.BaseProblem):
         default=0.
     )
 
+    # eta, etaMap, etaDeriv = Props.Invertible(
+    #     "Electrical chargeability (V/V), 0 <= eta < 1",
+    #     default=0.
+    # )
+    #
+    # tau, tauMap, tauDeriv = Props.Invertible(
+    #     "Time constant (s)",
+    #     default=1.
+    # )
+    #
+    # c, cMap, cDeriv = Props.Invertible(
+    #     "Frequency Dependency, 0 < c < 1",
+    #     default=0.5
+    # )
+
     eta, etaMap, etaDeriv = Props.Invertible(
-        "Electrical chargeability (V/V), 0 <= eta < 1",
-        default=0.
+        "Electrical chargeability (V/V), 0 <= eta < 1"
     )
 
     tau, tauMap, tauDeriv = Props.Invertible(
-        "Time constant (s)",
-        default=1.
+        "Time constant (s)"
     )
 
     c, cMap, cDeriv = Props.Invertible(
-        "Frequency Dependency, 0 < c < 1",
-        default=0.5
+        "Frequency Dependency, 0 < c < 1"
     )
 
     h, hMap, hDeriv = Props.Invertible(
-        "Receiver Height (m), h > 0",
+        "Receiver Height (m), h > 0"
     )
 
     def __init__(self, mesh, **kwargs):
-        Problem.BaseProblem.__init__(self, mesh, **kwargs)
+        print(f'{kwargs}')
+        Problem.BaseSimulation.__init__(self, mesh) # , **kwargs)
 
         # Check input arguments. If self.hankel_filter is not a valid filter,
         # it will set it to the default (key_201_2009).
@@ -601,4 +628,5 @@ class EM1D(Problem.BaseProblem):
         return JtJdiag
 
 if __name__ == '__main__':
-    main()
+    # main()
+    pass

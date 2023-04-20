@@ -1,7 +1,23 @@
 import scipy as sp
 import numpy as np
-from SimPEG.regularization import Sparse, SparseSmall, SparseDeriv, Simple
-from SimPEG import Mesh, Utils
+
+import discretize as Mesh
+# from SimPEG import maps as Maps
+from SimPEG import utils as Utils
+# from SimPEG import simulation as Problem
+# from SimPEG import props as Props
+# from SimPEG import models as Models
+# from SimPEG import survey as Survey
+# from SimPEG import regularization as Regularization
+# from SimPEG import data_misfit as DataMisfit
+# from SimPEG import inverse_problem as InvProblem
+# from SimPEG import optimization as Optimization
+# from SimPEG import directives as Directives
+# from SimPEG import inversion as Inversion
+
+# from SimPEG.regularization import Sparse, SparseSmall, SparseDeriv, Simple
+from SimPEG.regularization import Sparse
+# from SimPEG import Mesh, Utils
 
 
 def get_2d_mesh(n_sounding, hz):

@@ -2,7 +2,9 @@ import properties
 import numpy as np
 from scipy.spatial import cKDTree as kdtree
 import scipy.sparse as sp
-from SimPEG import Utils, Mesh
+import discretize as Mesh
+from SimPEG import utils as Utils
+# from SimPEG import Utils, Mesh
 from .EM1DSimulation import set_mesh_1d
 import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
@@ -100,7 +102,7 @@ class ModelIO(properties.HasProperties):
         if getattr(self, '_mesh_3d', None) is None:
             if self.hz is None:
                 raise Exception("hz information is required!")
-            self._mesh_3d = set_mesh_3d(np.r_[self.hz[:-1], 1e20])
+            self._mesh_3d = self.get_mesh_3d(np.r_[self.hz[:-1], 1e20])
         return self._mesh_3d
 
     @property

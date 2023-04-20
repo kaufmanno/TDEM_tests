@@ -1,4 +1,18 @@
-from SimPEG import Maps, Survey, Utils
+from SimPEG import maps as Maps
+from SimPEG import utils as Utils
+# from SimPEG import simulation as Problem
+# from SimPEG import props as Props
+# from SimPEG import models as Models
+from SimPEG import survey as Survey
+# from SimPEG import regularization as Regularization
+# from SimPEG import data_misfit as DataMisfit
+# from SimPEG import inverse_problem as InvProblem
+# from SimPEG import optimization as Optimization
+# from SimPEG import directives as Directives
+# from SimPEG import inversion as Inversion
+
+# from SimPEG import Maps, Survey, Utils
+
 import numpy as np
 import scipy.sparse as sp
 from scipy.constants import mu_0
@@ -8,6 +22,7 @@ from .DigFilter import (
 )
 from .Waveform import CausalConv
 from scipy.interpolate import interp1d
+from .Waveforms import rotate_to_x_axis
 from scipy.interpolate import InterpolatedUnivariateSpline as iuSpline
 import properties
 from empymod import filters
@@ -60,7 +75,8 @@ class BaseEM1DSurvey(Survey.BaseSurvey, properties.HasProperties):
     half_switch = properties.Bool("Switch for half-space", default=False)
 
     def __init__(self, **kwargs):
-        Survey.BaseSurvey.__init__(self, **kwargs)
+        source_list = kwargs.pop('source_list', None)
+        Survey.BaseSurvey.__init__(self, source_list, **kwargs)
 
     @property
     def h(self):
@@ -113,7 +129,7 @@ class BaseEM1DSurvey(Survey.BaseSurvey, properties.HasProperties):
                     "For the sourth paths, only single offset works!"
                 )
             xy_rot, xy_obs_rot, angle = rotate_to_x_axis(
-                np.flipud(xy), np.r_[offset, 0.]
+                np.flipud(self.src_path), np.r_[offset, 0.]
             )
 
         return self._src_paths

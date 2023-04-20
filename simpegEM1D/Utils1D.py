@@ -10,7 +10,7 @@ def plotLayer(sig, mesh, xscale='log', ax=None, showlayers=False, xlim=None,**kw
     # dz = LocSigZ[0]/2.
     # z = np.repeat(LocSigZ[1:], 2, axis=0)
     # z = np.r_[LocSigZ[0], z, LocSigZ[-1]] - dz
-    z_grid = mesh.vectorNx
+    z_grid = -mesh.nodes_x
     n_sig = sig.size
     sigma = np.repeat(sig, 2)
     z = []
@@ -28,6 +28,7 @@ def plotLayer(sig, mesh, xscale='log', ax=None, showlayers=False, xlim=None,**kw
             sig_min = -sig[~np.isnan(sig)].max()*0.5
             sig_max = sig[~np.isnan(sig)].max()*2
 
+    print(sigma, z)
     if ax==None:
         plt.xscale(xscale)
         plt.xlim(sig_min, sig_max)
@@ -51,6 +52,7 @@ def plotLayer(sig, mesh, xscale='log', ax=None, showlayers=False, xlim=None,**kw
                 ax.plot(np.linspace(sig_min, sig_max, 100), np.ones(100)*locz, 'b--', lw = 0.5)
         return ax.plot(sigma, z, 'k-', **kwargs)
 
+
 def plotComplexData(frequency, val, xscale='log', ax=None, **kwargs):
     """
         Plot Complex EM responses
@@ -71,6 +73,7 @@ def plotComplexData(frequency, val, xscale='log', ax=None, **kwargs):
         ax.grid(color='k', alpha=0.5, linestyle='dashed', linewidth=0.5)
 
         return ax.semilogx(frequency, val[Nfreq:], 'r', **kwargs)
+
 
 def movingaverage(val, filt=np.r_[1., 1., 3., 1., 1.]):
     filt = filt/filt.sum()

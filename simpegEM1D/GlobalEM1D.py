@@ -9,7 +9,22 @@ else:
 
 import numpy as np
 import scipy.sparse as sp
-from SimPEG import Problem, Props, Utils, Maps, Survey
+
+
+from SimPEG import maps as Maps
+from SimPEG import utils as Utils
+from SimPEG import simulation as Problem
+from SimPEG import props as Props
+# from SimPEG import models as Models
+from SimPEG import survey as Survey
+# from SimPEG import regularization as Regularization
+# from SimPEG import data_misfit as DataMisfit
+# from SimPEG import inverse_problem as InvProblem
+# from SimPEG import optimization as Optimization
+# from SimPEG import directives as Directives
+# from SimPEG import inversion as Inversion
+
+# from SimPEG import Problem, Props, Utils, Maps, Survey
 from .Survey import EM1DSurveyFD, EM1DSurveyTD
 from .EM1DSimulation import run_simulation_FD, run_simulation_TD
 import properties
@@ -20,7 +35,7 @@ def dot(args):
     return np.dot(args[0], args[1])
 
 
-class GlobalEM1DProblem(Problem.BaseProblem):
+class GlobalEM1DProblem(Problem.BaseSimulation):
     """
         The GlobalProblem allows you to run a whole bunch of SubProblems,
         potentially in parallel, potentially of different meshes.
@@ -745,7 +760,7 @@ class GlobalEM1DSurvey(Survey.BaseSurvey, properties.HasProperties):
         shift_for_J = 0
         shift_for_I = 0
         m = self.n_layer
-        for i in range(n_sounding):
+        for i in range(self.n_sounding):
             n = self.nD_vec[i]
             J_temp = np.tile(np.arange(m), (n, 1)) + shift_for_J
             I_temp = (
